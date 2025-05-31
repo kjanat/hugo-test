@@ -73,7 +73,7 @@ jobs:
           if [[ -f hugo.yaml ]]; then
             # Update baseUrl in config file
             if grep -q "baseUrl:" hugo.yaml; then
-              sed -i "s|baseUrl: *['\"].*['\"],|baseUrl: 'https://${REPO_OWNER}.github.io/${REPO_NAME}/',|" hugo.yaml
+              sed -i "s|baseUrl: *['\"].*['\"],|baseUrl: 'https://${REPO_OWNER}.github.io/${REPO_NAME}/'|" hugo.yaml
             else
               echo "baseUrl: 'https://${REPO_OWNER}.github.io/${REPO_NAME}/'," >> hugo.yaml
             fi
