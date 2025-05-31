@@ -75,7 +75,7 @@ jobs:
             if grep -q "baseUrl:" hugo.yaml; then
               sed -i "s|baseUrl: *|baseUrl: https://${REPO_OWNER}.github.io/${REPO_NAME}/|" hugo.yaml
             else
-              echo "baseUrl: 'https://${REPO_OWNER}.github.io/${REPO_NAME}/'," >> hugo.yaml
+              echo "baseUrl: https://${REPO_OWNER}.github.io/${REPO_NAME}/" >> hugo.yaml
             fi
             # Show results
             grep -E "baseUrl:" hugo.yaml | column -t
