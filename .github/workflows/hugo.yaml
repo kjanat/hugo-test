@@ -69,11 +69,20 @@ jobs:
           # Set variables from environment
           REPO_OWNER="${GITHUB_REPOSITORY_OWNER:-kjanat}"
           REPO_NAME="${GITHUB_REPOSITORY#*/}"
-          # Update baseUrl in config file
-          sed -i "s|baseUrl: *['\"].*['\"],|baseUrl: 'https://${REPO_OWNER}.github.io/${REPO_NAME}/',|" hugo.yaml
-          # Show results, nicely aligned
-          grep -E "baseUrl:" hugo.yaml \
-            | column -t
+          # Check if hugo.yaml exists
+          if [[ -f hugo.yaml ]]; then
+            # Update baseUrl in config file
+            if grep -q "baseUrl:" hugo.yaml; then
+              sed -i "s|baseUrl: *['\"].*['\"],|baseUrl: 'https://${REPO_OWNER}.github.io/${REPO_NAME}/',|" hugo.yaml
+            else
+              echo "baseUrl: 'https://${REPO_OWNER}.github.io/${REPO_NAME}/'," >> hugo.yaml
+            fi
+            # Show results
+            grep -E "baseUrl:" hugo.yaml | column -t
+          else
+            echo "Error: hugo.yaml file not found."
+            exit 1
+          fi
       - name: Build with Hugo
         run: |
           hugo \
