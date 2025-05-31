@@ -41,6 +41,7 @@ jobs:
           wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
           && sudo dpkg -i ${{ runner.temp }}/hugo.deb
       - name: Install Dart Sass
+        if: false
         run: sudo snap install dart-sass
       - name: Checkout
         uses: actions/checkout@v4
@@ -63,6 +64,17 @@ jobs:
             hugo-
       - name: Configure Git
         run: git config core.quotepath false
+      - name: Edit hugo.yaml
+        run: |
+          # Set variables from environment or hardcode if you want
+          REPO_OWNER="${GITHUB_REPOSITORY_OWNER:-kjanat}"
+          REPO_NAME="${GITHUB_REPOSITORY#*/}"
+          # Update url and baseUrl in config file
+          sed -i "s|baseUrl: *['\"].*['\"],|baseUrl: 'https://${REPO_OWNER}.github.io',|" hugo.yaml
+          # Show results, nicely aligned
+          grep -E "baseUrl:" hugo.yaml \
+            | sed "s/[',]//g" \
+            | column -t
       - name: Build with Hugo
         run: |
           hugo \
@@ -70,6 +82,7 @@ jobs:
             --minify \
             --baseURL "${{ steps.pages.outputs.base_url }}/" \
             --cacheDir "${{ runner.temp }}/hugo_cache"
+            --config hugo.yaml
       - name: Cache Save
         id: cache-save
         uses: actions/cache/save@v4

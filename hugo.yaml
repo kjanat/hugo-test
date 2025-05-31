@@ -1,7 +1,12 @@
 baseURL: https://kjanat.github.io/hugo-test/
 languageCode: nl-nl
-title: Hugo Test Site
 theme: ananke
+params:
+  contact:
+    email: info@example.org
+    phone: +1 202-555-1212
+  subtitle: The Best Widgets on Earth
+title: Hugo Test Site
 caches:
   images:
     dir: :cacheDir/images
